@@ -4370,7 +4370,7 @@
           "stopbit": 0
         }
       ],
-      "definition": "assert((base+off)%8==0, \"The memory must be aligned\");\nvar buf = new ArrayBuffer(8);\nvar arr = (new Uint32Array(buf));\narr[0] =  MP.w.(off+base);\narr[1] =  MP.w.(off+4+base)\nft = (new Float64Array(buf))[0];"
+      "definition": "assert((base+off)%8==0; \"The memory must be aligned\");\nvar buf = new ArrayBuffer(8);\nvar arr = (new Uint32Array(buf));\narr[0] =  MP.w.(off+base);\narr[1] =  MP.w.(off+4+base)\nft = (new Float64Array(buf))[0];"
     },
     {
       "name": "c.f.s",
