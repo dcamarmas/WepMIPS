@@ -2753,10 +2753,17 @@ try{
                       return -1;
                     }
                   }
-
+                  console.log(z)
                   if(architecture.instructions[i].fields[z].type == "inm"){
+                  	console.log(z)
                     var fieldsLength = architecture.instructions[i].fields[z].startbit - architecture.instructions[i].fields[z].stopbit + 1;
+                    console.log(z)
+                    console.log("AQUI1")
+                    console.log(fieldsLength)
+                    console.log(instructionParts)
+                    console.log(z)
                     if(instructionParts[z].match(/^0x/)){
+                    	console.log("AQUI2")
                       var value = instructionParts[z].split("x");
                       console.log(isNaN(parseInt(instructionParts[z], 16)));
                       if(isNaN(parseInt(instructionParts[z], 16)) == true){
@@ -2784,6 +2791,7 @@ try{
                       }
                     }
                     else if (instructionParts[z].match(/^(\d)+\.(\d)+/)){
+                    	console.log("AQUI4")
                       if(isNaN(parseFloat(instructionParts[z])) == true){
                         app._data.alertMessaje = "Immediate number " + instructionParts[z] + " is not valid";
                         app._data.type = 'danger';
@@ -2809,9 +2817,10 @@ try{
                       }
                     }
                     else if(isNaN(parseInt(instructionParts[z]))){
-
+                    	console.log("AQUI6")
                     }
                     else {
+                    	console.log("AQUI8")
                       var numAux = parseInt(instructionParts[z], 10);
                       if(isNaN(parseInt(instructionParts[z])) == true){
                         app._data.alertMessaje = "Immediate number " + instructionParts[z] + " is not valid";
@@ -5572,7 +5581,7 @@ try{
 
             console.log(definition);
 
-            re = /Field.(\d).(.*?)[;\s]/;
+            re = /Field.(\d).(.*?)[=<>;\s]/;
             while (definition.search(re) != -1){
               var match = re.exec(definition);
               console.log(match);
@@ -6744,22 +6753,63 @@ try{
                 auxDef = auxDef.replace(re, instructionExecParts[i]);
               }*/
 
-              if(signatureParts[i] == "INT-Reg" || signatureParts[i] == "SFP-Reg" || signatureParts[i] == "DFP-Reg" || signatureParts[i] == "Ctrl-Reg"){
-                re = new RegExp("[0-9]{" + instructionExecParts[i].length + "}");
-                if(instructionExecParts[i].search(re) != -1){
-                  var re = new RegExp(signatureRawParts[i],"g");
-                  auxDef = auxDef.replace(re, "R" + instructionExecParts[i]);
-                }
-                else{
-                  var re = new RegExp(signatureRawParts[i],"g");
-                  auxDef = auxDef.replace(re, instructionExecParts[i]);
-                }
-              }
-              else{
-                var re = new RegExp(signatureRawParts[i],"g");
-                auxDef = auxDef.replace(re, instructionExecParts[i]);
-              }
-            }
+              var re1 = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'([^A-Za-z])');
+              var re2 = new RegExp('^'+signatureRawParts[i]+'([^A-Za-z])');
+              var re3 = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'$');
+
+              while(auxDef.search(re1) != -1 || auxDef.search(re2) != -1 || auxDef.search(re3) != -1){
+              	console.log(signatureRawParts[i])
+	              if(signatureParts[i] == "INT-Reg" || signatureParts[i] == "SFP-Reg" || signatureParts[i] == "DFP-Reg" || signatureParts[i] == "Ctrl-Reg"){
+	                re = new RegExp("[0-9]{" + instructionExecParts[i].length + "}");
+	                if(instructionExecParts[i].search(re) != -1){
+	                  var re = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'([^A-Za-z])');
+
+	                  if (auxDef.search(re) != -1){
+					            match = re.exec(auxDef);
+					            console.log(match)
+					            auxDef = auxDef.replace(re, match[1] + "R" + instructionExecParts[i] + match[2]);
+					          }
+	                }
+	                else{
+	                  var re = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'([^A-Za-z])');
+
+	                  if (auxDef.search(re) != -1){
+					            match = re.exec(auxDef);
+					            console.log(match)
+					            auxDef = auxDef.replace(re, match[1] + instructionExecParts[i] + match[2]);
+					          }
+
+					          var re = new RegExp('^'+signatureRawParts[i]+'([^A-Za-z])');
+
+	                  if (auxDef.search(re) != -1){
+					            match = re.exec(auxDef);
+					            console.log(match)
+					            auxDef = auxDef.replace(re, instructionExecParts[i] + match[1]);
+					          }
+
+					          var re = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'$');
+
+	                  if (auxDef.search(re) != -1){
+					            match = re.exec(auxDef);
+					            console.log(match)
+					            auxDef = auxDef.replace(re, match[1] + instructionExecParts[i]);
+					          }
+	                }
+	              }
+	              else{
+	                var re = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'([^A-Za-z])');
+
+	                if (auxDef.search(re) != -1){
+				            match = re.exec(auxDef);
+				            console.log(match)
+				            auxDef = auxDef.replace(re, match[1] + instructionExecParts[i] + match[2]);
+				          }
+	              }
+	              var re1 = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'([^A-Za-z])');
+	              var re2 = new RegExp('^'+signatureRawParts[i]+'([^A-Za-z])');
+	              var re3 = new RegExp('([^A-Za-z])'+signatureRawParts[i]+'$');
+	            }
+	          }
           }
 
           if(binary == true){
@@ -7094,19 +7144,19 @@ try{
             var match = re.exec(auxDef);
             var args = match[1].split(";");
             auxDef = auxDef.replace(re, "");
-            auxDef = auxDef + "\n\nif("+ args[0] +"){}else{app.exception("+ args[1] +");}";
+            auxDef = "if("+ args[0] +"){}else{app.exception("+ args[1] +");}" + auxDef;
           }
 
           console.log(auxDef);
 
           /*Write in memory*/
-          re = /MP.([whb]).\((.*?)\)\) *=/;
+          re = /MP.([whb]).\[(.*?)\] *=/;
           if (auxDef.search(re) != -1){
             var match = re.exec(auxDef);
             var auxDir;
-            eval("auxDir="+match[2]+")");
+            eval("auxDir="+match[2]);
 
-            re = /MP.[whb].\((.*?)\)\) *=/g;
+            re = /MP.[whb].\[(.*?)\] *=/g;
             auxDef = auxDef.replace(re, "var dir"+ auxDir +"=");
             auxDef = "var dir" + auxDir + "=null\n" + auxDef;
             auxDef = auxDef + "\n this.writeMemory(dir"+auxDir+",'0x"+auxDir.toString(16)+"','"+match[1]+"');"
@@ -7122,13 +7172,13 @@ try{
             auxDef = auxDef + "\n this.writeMemory(dir"+match[2]+",'"+match[2]+"','"+match[1]+"');"
           }
 
-          re = /MP.([whb]).\((.*?)\)\)/;
+          re = /MP.([whb]).\[(.*?)\]/;
           if (auxDef.search(re) != -1){
             var match = re.exec(auxDef);
             var auxDir;
-            eval("auxDir="+match[2]+")");
+            eval("auxDir="+match[2]);
 
-            re = /MP.[whb].\((.*?)\)\)/g;
+            re = /MP.[whb].\[(.*?)\]/g;
             auxDef = auxDef.replace(re, "this.readMemory('0x"+auxDir.toString(16)+"', '"+match[1]+"')");
           }
 
@@ -7485,11 +7535,13 @@ try{
                 for (var z = 0; z < memory[index][i].Binary.length; z++){
                   memValue = memory[index][i].Binary[z].Bin + memValue;
                 }
-                return bigInt(memValue, 16).value;
+                //return bigInt(memValue, 16).value;
+                return parseInt(memValue,16);
               }
             }
           }
-          return bigInt(0).value;
+          //return bigInt(0).value;
+          return 0;
         }
 
         if (type == "h"){
@@ -7525,18 +7577,21 @@ try{
                   for (var z = 0; z < memory[index][i].Binary.length -2; z++){
                     memValue = memory[index][i].Binary[z].Bin + memValue;
                   }
-                  return bigInt(memValue, 16).value;
+                  //return bigInt(memValue, 16).value;
+                  return parseInt(memValue,16);
                 }
                 else{
                   for (var z = 2; z < memory[index][i].Binary.length; z++){
                     memValue = memory[index][i].Binary[z].Bin + memValue;
                   }
-                  return bigInt(memValue, 16).value;
+                  //return bigInt(memValue, 16).value;
+                  return parseInt(memValue,16);
                 }
               }
             }
           }
-          return bigInt(0).value; 
+          //return bigInt(0).value;
+          return 0;
         }
 
         if (type == "b"){
@@ -7569,11 +7624,13 @@ try{
               var aux = "0x"+(memory[index][i].Binary[j].Addr).toString(16);
               if(aux == addr || memory[index][i].Binary[j].Tag == addr){
                 memValue = memory[index][i].Binary[j].Bin + memValue;
-                return bigInt(memValue, 16).value;
+                //return bigInt(memValue, 16).value;
+                return parseInt(memValue,16);
               }
             }
           }
-          return bigInt(0).value; 
+          //return bigInt(0).value; 
+          return 0;
         }
       },
       /*Write value in memory*/
