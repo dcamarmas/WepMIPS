@@ -1649,7 +1649,7 @@ function data_segment_compiler()
                         break;
                     }
 
-                    data_address = creator_memory_storestring ( string, string.length, data_address, label, "ascii", align );
+                    data_address = creator_memory_storestring(string, string.length, data_address, label, "ascii", align);
 
                     console_log("ascii_not_null_end Terminado");
 
@@ -1709,7 +1709,7 @@ function data_segment_compiler()
 	                	return packCompileError('m17', "", 'error', "danger") ;
 	                }
 
-                    data_address = creator_memory_storestring ( string, string.length, data_address, label, "asciiz", align );
+                    data_address = creator_memory_storestring(string, string.length, data_address, label, "asciiz", align);
 
                     console_log("ascii_null_end Terminado");
 
@@ -1758,8 +1758,7 @@ function data_segment_compiler()
                   }
 
                   var size = parseInt(token) * architecture.directives[j].size;
-
-                  data_address = creator_memory_storestring ( null, size, data_address, label, "space", align );
+                  data_address = creator_memory_storestring(size, size, data_address, label, "space", align);
 
                   next_token();
                   token = get_token();

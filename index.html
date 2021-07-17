@@ -3248,7 +3248,7 @@
                 <!-- Data memory -->
                 <b-tab title="Data" active>
 
-                  <table-mem :memory="memory"
+                  <table-mem :main_memory="main_memory"
                              :memory_segment="memory_hash[0]"
                              :track_stack_names="track_stack_names" 
                              :callee_subrutine="callee_subrutine" 
@@ -3272,7 +3272,7 @@
                 <!-- Text memory -->
                 <b-tab title="Text">
 
-                  <table-mem :memory="memory"
+                  <table-mem :main_memory="main_memory"
                              :memory_segment="memory_hash[1]"
                              :track_stack_names="track_stack_names" 
                              :callee_subrutine="callee_subrutine" 
@@ -3284,7 +3284,7 @@
                 <!-- Stack memory -->
                 <b-tab title="Stack">
 
-                  <table-mem :memory="memory"
+                  <table-mem :main_memory="main_memory"
                              :memory_segment="memory_hash[2]"
                              :track_stack_names="track_stack_names" 
                              :callee_subrutine="callee_subrutine" 
